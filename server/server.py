@@ -11,9 +11,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import logging
 
-# Initialize Flask application
 app = Flask(__name__)
-# Configure CORS to allow requests from the specified origin
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Setup logging
@@ -31,47 +29,32 @@ model = load_model('/Users/ryanarafeh/Desktop/breedfinder/server/final_dog_breed
 with open('/Users/ryanarafeh/Desktop/breedfinder/server/breed_names.json', 'r') as f:
     breed_names = json.load(f)
 
-# Function to format breed names by removing numeric prefixes and replacing underscores with spaces
 def format_breed_name(breed_name):
     name_without_prefix = breed_name.split('-', 1)[-1] if '-' in breed_name else breed_name
     formatted_name = ' '.join(word.capitalize() for word in name_without_prefix.split('_'))
     return formatted_name
 
-# Route to handle prediction requests
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         if 'file' not in request.files:
             return jsonify(error="Please upload a file"), 400
 
-            # Extract file from request
-            file = request.files['file']
-            # Read image file as a binary stream
-            img_bytes = io.BytesIO(file.read())
-            # Open and convert image to RGB
-            img = Image.open(img_bytes).convert('RGB')
-            # Resize image to required size for the model (224x224)
-            img = img.resize((224, 224))
-            # Convert PIL image to numpy array
-            img_array = image.img_to_array(img)
-            # Expand dimensions to fit model input structure
-            img_array_expanded_dims = np.expand_dims(img_array, axis=0)
-            # Preprocess the image for the model
-            processed_image = preprocess_input(img_array_expanded_dims)
-            # Predict breed from image
-            prediction = model.predict(processed_image)
-            # Get index of the highest confidence value
-            breed_index = np.argmax(prediction, axis=1)[0]
-            # Find maximum confidence value
-            confidence = np.max(prediction)
-            # Retrieve corresponding breed name from index
-            breed_name = breed_names[breed_index]
-            # Format breed name for readability
-            formatted_breed_name = format_breed_name(breed_name)
-            # Convert confidence to percentage and round to two decimals
-            confidence_percentage = round(confidence * 100, 2)
+        file = request.files['file']
+        img_bytes = io.BytesIO(file.read())
+        img = Image.open(img_bytes).convert('RGB')
+        img = img.resize((224, 224))
+        img_array = image.img_to_array(img)
+        img_array_expanded_dims = np.expand_dims(img_array, axis=0)
+        processed_image = preprocess_input(img_array_expanded_dims)
 
-
+        prediction = model.predict(processed_image)
+        breed_index = np.argmax(prediction, axis=1)[0]
+        confidence = np.max(prediction)
+        breed_name = breed_names[breed_index]
+        formatted_breed_name = format_breed_name(breed_name)
+        confidence_percentage = round(confidence * 100, 2)
+        
         # Insert the prediction results into the MongoDB collection
         predictions_collection.insert_one({
             "timestamp": datetime.utcnow(),
@@ -94,6 +77,6 @@ def get_history():
         logging.error(f"An error occurred when fetching history: {str(e)}")
         return jsonify(error=str(e)), 500
 
-# Start the Flask application
+
 if __name__ == '__main__':
     app.run(debug=True, port=9000)
