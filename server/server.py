@@ -1,15 +1,22 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from keras.models import load_model
+from pymongo import MongoClient
+from datetime import datetime
+import io
+from PIL import Image
+import numpy as np
+import json
+from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-import numpy as np
-from PIL import Image
-import io
-import json
 
 app = Flask(__name__)
 CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
+
+# MongoDB setup
+client = MongoClient("mongodb+srv://arafehryan:ryan123@dogs.iyycswl.mongodb.net/?retryWrites=true&w=majority&appName=dogs")
+db = client.DogBreedClassifier
+predictions_collection = db.predictions
 
 # Load the trained model
 model = load_model('/Users/ryanarafeh/Desktop/breedfinder/server/final_dog_breed_classifier.h5')
@@ -25,6 +32,12 @@ def format_breed_name(breed_name):
     # Replace underscores with spaces and capitalize each word
     formatted_name = ' '.join(word.capitalize() for word in name_without_prefix.split('_'))
     return formatted_name
+
+@app.route('/')
+def index():
+    # Example route to test the database insertion
+    predictions_collection.insert_one({"test": "data"})
+    return 'Connected to MongoDB and data inserted!'
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -50,6 +63,11 @@ def predict():
     confidence_percentage = round(confidence * 100, 2)
 
     return jsonify(breed_name=formatted_breed_name, confidence=f"{confidence_percentage}%")
+
+@app.route('/history', methods=['GET'])
+def get_history():
+    predictions = list(predictions_collection.find({}, {'_id': 0, 'timestamp': 1, 'breed_name': 1, 'confidence': 1}).sort('timestamp', -1))
+    return jsonify(predictions)
 
 
 if __name__ == '__main__':

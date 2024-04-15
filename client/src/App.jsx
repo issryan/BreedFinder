@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -9,6 +9,20 @@ function App() {
   const [confidence, setConfidence] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/history');
+      setHistory(response.data);
+    } catch (error) {
+      console.error('Error fetching history:', error);
+    }
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -44,6 +58,7 @@ function App() {
         setBreed(`Predicted Breed: ${response.data.breed_name}`);
         setConfidence(`Confidence: ${response.data.confidence}`);
         setError('');
+        fetchHistory();  // Refresh history after a new prediction
       } else {
         setError('Failed to get a valid response from the server');
         setBreed('');
@@ -61,7 +76,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>BreedFinder</h1>
+        <h1>Dog Breed Classifier</h1>
         <form onSubmit={handleSubmit}>
           <input type="file" className="custom-file-input" onChange={handleFileChange} />
           {imagePreviewUrl && <img src={imagePreviewUrl} alt="Dog Preview" />}
@@ -71,6 +86,14 @@ function App() {
         {breed && <p>{breed}</p>}
         {confidence && <p>{confidence}</p>}
         {error && <p className="error">{error}</p>}
+        <h2>Prediction History</h2>
+        <div>
+          {history.map((entry, index) => (
+            <div key={index}>
+              <p>{entry.timestamp}: {entry.breed_name} - Confidence: {entry.confidence}%</p>
+            </div>
+          ))}
+        </div>
       </header>
     </div>
   );
