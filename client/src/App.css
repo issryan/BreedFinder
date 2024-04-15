@@ -3,23 +3,44 @@ body {
   background-color: #f4f4f4;
   color: #333;
   margin: 0;
-  padding: 0;
+  padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-.App-header {
-  text-align: center;
+.container {
+  width: 90%;
+  max-width: 600px; 
+  display: flex;
+  flex-direction: column; 
+  gap: 20px; 
+  padding: 20px;
+}
+
+.section {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 90%;
-  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
 }
 
+.App-header {
+  text-align: center;
+}
+
+.custom-file-input {
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px 20px;
+  cursor: pointer;
+}
 
 button {
   background-color: #007bff;
@@ -30,8 +51,7 @@ button {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
-  display: block; 
-  margin: 20px auto; 
+  margin-top: 20px; 
 }
 
 button:hover {
@@ -39,12 +59,12 @@ button:hover {
 }
 
 img {
-  margin-top: 20px;
+  display: block; 
   max-width: 100%;
   height: auto;
   border-radius: 8px;
-  display: block; 
-  margin-bottom: 20px; /* Adds space below the image */
+  margin-top: 20px;
+  margin-bottom: 20px; 
 }
 
 .error {
