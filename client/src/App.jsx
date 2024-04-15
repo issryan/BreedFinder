@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
+  //declare states to hold inputs and outputs
   const [file, setFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [breed, setBreed] = useState('');
@@ -11,10 +12,12 @@ function App() {
   const [error, setError] = useState('');
   const [history, setHistory] = useState([]);
 
+  // Fetch history on component mount
   useEffect(() => {
     fetchHistory();
   }, []);
 
+  // Function to fetch prediction history from the backend
   const fetchHistory = async () => {
     try {
       const response = await axios.get('http://localhost:9000/history');
@@ -25,6 +28,7 @@ function App() {
     }
   };
 
+  // Function to handle file selection
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -37,6 +41,7 @@ function App() {
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!file) {
