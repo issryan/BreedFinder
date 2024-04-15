@@ -17,12 +17,15 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/history');
-      setHistory(response.data);
+        const response = await axios.get('http://localhost:9000/history');
+        console.log("Fetched history:", response.data);  // Check what is received
+        setHistory(response.data);
     } catch (error) {
-      console.error('Error fetching history:', error);
+        console.error('Error fetching history:', error);
+        setError('Failed to fetch history');
     }
-  };
+};
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
