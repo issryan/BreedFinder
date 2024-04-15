@@ -1,56 +1,65 @@
-Dog Breed Classification App
+# Dog Breed Classification App
 
-Introduction
-This project combines machine learning, web development, and database technologies to classify dog breeds from images, leveraging the Stanford Dog Breed dataset for training.
+## Introduction
+This project integrates machine learning, web development, and database management to create an application that classifies dog breeds from images. It uses the Stanford Dog Breed dataset for model training.
 
-Development Process
-1. Model Training: train_dog_classification_model.ipynb
-Objective
-Develop a robust machine learning model to accurately identify dog breeds from images.
+## Development Process
 
-Choice of Model: MobileNet
-Why MobileNet: Chosen for its efficiency on limited resources, MobileNet uses depthwise separable convolutions, making it suitable for web applications by reducing computational demands without significantly sacrificing accuracy.
-Data Preparation
-Dataset: Utilizes the Stanford Dog Breed dataset.
-Preprocessing: Images are standardized in size and normalized.
-Augmentation: Techniques like rotation and flipping are used to improve model robustness.
-Model Accuracy vs. Confidence Score
-Model Accuracy: Refers to the overall performance of the model during testing, indicating how often the model correctly identifies the breed.
-Confidence Score: When a user submits an image, the model provides a confidence score with its prediction. This score represents the probability associated with the model's prediction, reflecting how certain the model is about its classification. This score is derived from the softmax output layer of the neural network, which provides a probabilistic interpretation of each class.
-Challenges
-Data Imbalance: Mitigated by using weighted loss functions and augmented training data.
-Model Selection: MobileNet was chosen for its balance between efficiency and performance.
+### 1. Model Training
+**Notebook:** `train_dog_classification_model.ipynb`
 
-Objective: Create a scalable and secure backend that can handle API requests to classify dog breeds and manage user interactions.
+#### Objective
+Develop a robust machine learning model to accurately classify dog breeds from images.
 
-Process:
+#### Choice of Model: MobileNet
+- **Why MobileNet?** MobileNet is selected for its efficiency on devices with limited resources. It utilizes depthwise separable convolutions, which reduces computational demands without a significant loss in accuracy, making it ideal for web applications.
 
-Flask Setup: I chose Flask due to its simplicity and flexibility. It allowed me to quickly set up RESTful API endpoints.
-Integration with the Model: The trained model was integrated into the Flask app. This setup involved loading the trained model and handling image data from POST requests for classification.
-Database Integration: MongoDB was used to store user data and logs, which helped in managing user sessions and storing historical data for further analysis.
-Challenges:
+#### Data Preparation
+- **Dataset:** Stanford Dog Breed dataset.
+- **Preprocessing:** Images are standardized in size and normalized.
+- **Augmentation:** Techniques like rotation and flipping are applied to enhance model robustness.
 
-Ensuring secure and efficient image data handling.
-Integrating the Python machine learning model with Flask.
-Ensuring correct dependency versions are installed and compatible.
+#### Model Accuracy vs. Confidence Score
+- **Model Accuracy:** Measures the overall performance during testing, indicating the frequency of correct breed identification.
+- **Confidence Score:** When a user submits an image, the model provides a confidence score with its prediction, reflecting the probability associated with the model's prediction.
 
+#### Challenges
+- **Data Imbalance:** Addressed through weighted loss functions and augmented training data.
+- **Model Selection:** MobileNet was chosen for its balance between efficiency and performance.
 
-3. Frontend Development: App.jsx
-Objective: Design a user-friendly interface that allows users to easily interact with the application.
+### 2. Backend Development
 
-Process:
+#### Objective
+Create a scalable and secure backend capable of handling API requests for dog breed classification and managing user interactions.
 
-React Framework: Leveraging React helped in building a responsive and interactive UI.
-Component Design: The application was structured into components like Image Upload, Results Display, and Header.
-State Management: React’s state management was utilized to handle the state across components, particularly for image data and classification results.
-Challenges:
+#### Process
+- **Flask Setup:** Selected Flask for its simplicity and flexibility, facilitating quick RESTful API endpoint setup.
+- **Integration with the Model:** The trained model is integrated into the Flask app, which involves loading the model and handling image data from POST requests.
+- **Database Integration:** MongoDB is used for storing user data and logs, aiding in session management and historical data analysis.
 
-Ensuring compatibility across different browsers.
-Implementing an intuitive design that simplifies user interactions.
+#### Challenges
+- Ensuring secure and efficient image data handling.
+- Integrating the Python machine learning model with Flask.
+- Ensuring compatibility of dependency versions.
 
+### 3. Frontend Development
+**File:** `App.jsx`
 
-References
-Howard, A. G., et al. (2017). MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications. [arXiv:1704.04861.](https://arxiv.org/abs/1704.04861)
-Khosla, Aditya, et al. "Novel Dataset for Fine-Grained Image Categorization: Stanford Dogs." Proc. CVPR Workshop on Fine-Grained Visual Categorization (FGVC), 2011. http://vision.stanford.edu/aditya86/ImageNetDogs/
-TensorFlow Documentation. (n.d.). Retrieved from https://www.tensorflow.org/
-Keras Documentation. (n.d.). Retrieved from https://keras.io/
+#### Objective
+Design a user-friendly interface that enables easy interaction with the application.
+
+#### Process
+- **React Framework:** Utilized to construct a responsive and interactive UI.
+- **Component Design:** Structured into components like Image Upload, Results Display, and Header.
+- **State Management:** Employed React’s state management to control component states, particularly for image data and classification results.
+
+#### Challenges
+- Ensuring browser compatibility.
+- Implementing an intuitive design to simplify user interactions.
+
+## References
+- Howard, A. G., et al. (2017). MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications. [arXiv:1704.04861](https://arxiv.org/abs/1704.04861).
+- Khosla, Aditya, et al. "Novel Dataset for Fine-Grained Image Categorization: Stanford Dogs." Proc. CVPR Workshop on Fine-Grained Visual Categorization (FGVC), 2011. http://vision.stanford.edu/aditya86/ImageNetDogs/
+- [Stanford Dogs Dataset on Kaggle](https://www.kaggle.com/datasets/jessicali9530/stanford-dogs-dataset) - Provides the dataset used for training the machine learning model.
+- [TensorFlow Documentation](https://www.tensorflow.org/)
+- [Keras Documentation](https://keras.io/)
